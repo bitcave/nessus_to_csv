@@ -1,33 +1,29 @@
-# Script to parse Nessus output to csv file
-# Author: Michael Gianarakis
-# Date: 29 July 2011
-# Version 0.1 (i.e. the hack version that is very poorly coded)
-
 #!/usr/bin/env ruby
+
 require 'rubygems'
 require 'ruby-nessus'
 require 'csv'
 
 # Name of the Nessus output file
 puts "Type the name of the Nessus output file:"
-varNessusOutputFile = gets.chomp + '.nessus'
+nessus_output_file = gets.chomp + '.nessus'
 
 # Name of the detailed CSV file to output to
 puts "Type the name of the detailed CSV file: "
-varNessusCSVFile = gets.chomp
+nessus_CSV_detailed = gets.chomp
 
 # Name of the summary CSV file to output to
 puts "Type the name of the summary CSV file: "
-varNessusCSVSumFile = gets.chomp
+nessus_CSV_summary = gets.chomp
 
 # Detailed CSV File
-CSV.open(varNessusCSVFile, "wb") do |csv|
+CSV.open(nessus_CSV_detailed, "wb") do |csv|
 	
 	# Header Row
 	csv << ["host_ip", "host_name", "host_os", "port", "vulnerability_severity", "vulnerability_name", "vulnerability_synopsis", "vulnerability_description", "vulnerability_solution", "vulnerability_info", "vulnerability_risk", "vulnerability_cve"] 
 
 	# Data Rows	
-	Nessus::Parse.new(varNessusOutputFile) do |scan|
+	Nessus::Parse.new(nessus_output_file) do |scan|
 		scan.each_host do |host|
 			host_ip = host.ip
 			host_name = host.hostname
@@ -50,13 +46,13 @@ CSV.open(varNessusCSVFile, "wb") do |csv|
 end
 
 # Summary CSV File
-CSV.open(varNessusCSVSumFile, "wb") do |csv|
+CSV.open(nessus_CSV_summary, "wb") do |csv|
 	
 	# Header Row
 	csv << ["host_ip", "host_name", "no_of_high", "no_of_meduim", "no_of_low", "no_of_info"] 
 
 	# Data Rows	
-	Nessus::Parse.new(varNessusOutputFile) do |scan|
+	Nessus::Parse.new(nessus_output_file) do |scan|
 		scan.each_host do |host|
 			host_ip = host.ip
 			host_name = host.hostname
