@@ -4,17 +4,14 @@ require 'rubygems'
 require 'ruby-nessus'
 require 'csv'
 
-# Name of the Nessus output file
-puts "Type the name of the Nessus output file:"
-nessus_output_file = gets.chomp + '.nessus'
+if ARGV.empty?
+	abort("Usage: ruby nessus_to_csv.rb [PATH TO NESSUS FILE] \nThis will generate two CSV files in the current directory -> \"detailed_findings\" and \"summary_of_findings\"")	  
+else
+	nessus_output_file = ARGV[0]
+end
 
-# Name of the detailed CSV file to output to
-puts "Type the name of the detailed CSV file: "
-nessus_CSV_detailed = gets.chomp
-
-# Name of the summary CSV file to output to
-puts "Type the name of the summary CSV file: "
-nessus_CSV_summary = gets.chomp
+nessus_CSV_detailed = "detailed_findings"
+nessus_CSV_summary = "summary_of_findings"
 
 # Detailed CSV File
 CSV.open(nessus_CSV_detailed, "wb") do |csv|
